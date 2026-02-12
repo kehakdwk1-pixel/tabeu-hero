@@ -46,6 +46,28 @@ const characters = {
   tempest:   { name: "TEMPEST",   title: "Storm Caller",      faction: "HEROES",  power: "Weather Control",         rank: "A-Class", description: "날씨를 조종하는 능력자. 정의감이 강하고 동료를 아끼는 성격.",                       stats: { power: 80, intelligence: 78, speed: 82, durability: 77 } },
 };
 
+type GalleryItem = {
+  id: number;
+  title: string;
+  tag: string;
+  type: string;
+  size: "small" | "large" | "wide";
+  accent: string;
+};
+
+const galleryItems: GalleryItem[] = [
+  { id: 1,  title: "VOID — 공허의 지배자",      tag: "ECLIPSE", type: "Character", size: "large", accent: "#8b5cf6" },
+  { id: 2,  title: "NIGHTFALL — 그림자 속으로", tag: "ECLIPSE", type: "Character", size: "small", accent: "#6366f1" },
+  { id: 3,  title: "AEGIS — 불멸의 방패",       tag: "HEROES",  type: "Character", size: "small", accent: "#10b981" },
+  { id: 4,  title: "대격돌 — 2024",             tag: "EVENT",   type: "Scene",     size: "wide",  accent: "#ef4444" },
+  { id: 5,  title: "HAVOC — 파괴의 화신",       tag: "ECLIPSE", type: "Character", size: "small", accent: "#dc2626" },
+  { id: 6,  title: "ZENITH — 정점",             tag: "HEROES",  type: "Character", size: "small", accent: "#0ea5e9" },
+  { id: 7,  title: "The City — 야경",           tag: "WORLD",   type: "Scene",     size: "large", accent: "#7c3aed" },
+  { id: 8,  title: "MIRAGE — 환영의 마녀",      tag: "ECLIPSE", type: "Character", size: "small", accent: "#a855f7" },
+  { id: 9,  title: "QUANTUM — 시간의 틈",       tag: "HEROES",  type: "Character", size: "small", accent: "#06b6d4" },
+  { id: 10, title: "ECLIPSE 조직도",            tag: "WORLD",   type: "Concept",   size: "wide",  accent: "#8b5cf6" },
+];
+
 // ─── 로딩 ─────────────────────────────────────────────────
 
 function LoadingScreen({ onComplete }: { onComplete: () => void }) {
@@ -299,6 +321,101 @@ function CharactersPage({ onSelect }: { onSelect: (char: Character) => void }) {
   );
 }
 
+// ─── 갤러리 페이지 ───────────────────────────────────────
+
+const GALLERY_TAGS = ["ALL", "ECLIPSE", "HEROES", "WORLD", "EVENT"] as const;
+
+function GalleryPage() {
+  const [filter, setFilter] = useState<string>("ALL");
+  const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+
+  const filtered = filter === "ALL"
+    ? galleryItems
+    : galleryItems.filter(g => g.tag === filter);
+
+  return (
+    <div className="page-gallery">
+      <div className="section-inner" style={{ paddingTop: "60px" }}>
+        <SectionHeader title="GALLERY" sub="ARTWORKS & ILLUSTRATIONS" />
+
+        <div className="filter-tabs">
+          {GALLERY_TAGS.map(t => (
+            <button
+              key={t}
+              className={`filter-tab ${filter === t ? "active" : ""}`}
+              onClick={() => setFilter(t)}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+
+        <div className="gallery-grid">
+          {filtered.map((item, i) => (
+            <div
+              key={item.id}
+              className={`gallery-card size-${item.size}`}
+              style={{ animationDelay: `${i * 0.07}s` }}
+              onClick={() => setLightbox(item)}
+            >
+              <div className="gallery-img" style={{ "--accent": item.accent } as React.CSSProperties}>
+                <div className="gallery-noise" />
+                <div
+                  className="gallery-glow"
+                  style={{ background: `radial-gradient(circle at 40% 40%, ${item.accent}44, transparent 65%)` }}
+                />
+                <span className="gallery-placeholder">ARTWORK</span>
+              </div>
+              <div className="gallery-overlay">
+                <div className="gallery-meta">
+                  <span className="gallery-type">{item.type}</span>
+                  <h3 className="gallery-title">{item.title}</h3>
+                </div>
+                <span
+                  className="gallery-tag"
+                  style={{ color: item.accent, borderColor: `${item.accent}66`, background: `${item.accent}18` }}
+                >
+                  {item.tag}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 라이트박스 */}
+      {lightbox && (
+        <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
+          <div className="lightbox-card" onClick={e => e.stopPropagation()}>
+            <button type="button" className="modal-close" onClick={e => { e.stopPropagation(); setLightbox(null); }} aria-label="닫기">×</button>
+            <div
+              className="lightbox-img"
+              style={{ "--accent": lightbox.accent } as React.CSSProperties}
+            >
+              <div className="gallery-noise" />
+              <div
+                className="gallery-glow"
+                style={{ background: `radial-gradient(circle at 40% 40%, ${lightbox.accent}55, transparent 65%)` }}
+              />
+              <span className="gallery-placeholder" style={{ fontSize: "1rem" }}>ARTWORK</span>
+            </div>
+            <div className="lightbox-info">
+              <span
+                className="gallery-tag"
+                style={{ color: lightbox.accent, borderColor: `${lightbox.accent}66`, background: `${lightbox.accent}18` }}
+              >
+                {lightbox.tag}
+              </span>
+              <h2 className="lightbox-title">{lightbox.title}</h2>
+              <p className="lightbox-type">{lightbox.type}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── 루트 ─────────────────────────────────────────────────
 
 export default function App() {
@@ -316,28 +433,33 @@ export default function App() {
       </div>
 
       <div className="layout">
-        {/* 상단 네비 */}
         <nav className="topnav">
           <div className="topnav-logo">ECLIPSE</div>
           <div className="topnav-tabs">
             <button
-              className={`topnav-tab ${page === "home"  ? "active" : ""}`}
+              className={`topnav-tab ${page === "home"    ? "active" : ""}`}
               onClick={() => setPage("home")}
             >
               HOME
             </button>
             <button
-              className={`topnav-tab ${page === "chars" ? "active" : ""}`}
+              className={`topnav-tab ${page === "chars"   ? "active" : ""}`}
               onClick={() => setPage("chars")}
             >
               CHARACTERS
             </button>
+            <button
+              className={`topnav-tab ${page === "gallery" ? "active" : ""}`}
+              onClick={() => setPage("gallery")}
+            >
+              GALLERY
+            </button>
           </div>
         </nav>
 
-        {/* 페이지 전환 */}
-        {page === "home"  && <HomePage />}
-        {page === "chars" && <CharactersPage onSelect={setChar} />}
+        {page === "home"    && <HomePage />}
+        {page === "chars"   && <CharactersPage onSelect={setChar} />}
+        {page === "gallery" && <GalleryPage />}
 
         <footer className="footer">
           <p>© 2026 ECLIPSE // ALL RIGHTS RESERVED</p>
