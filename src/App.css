@@ -879,11 +879,13 @@ body {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.gallery-card:hover .gallery-overlay {
+.gallery-card:hover .gallery-overlay,
+.gallery-card.touched .gallery-overlay {
   opacity: 1;
 }
 
-.gallery-card:hover .gallery-img::after {
+.gallery-card:hover .gallery-img::after,
+.gallery-card.touched .gallery-img::after {
   opacity: 0.5;
 }
 
@@ -1087,16 +1089,109 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.8); }
 
 /* ────────────────────────────────────────
-   반응형
+   반응형 — 태블릿 (max 900px)
 ──────────────────────────────────────── */
-@media (max-width: 768px) {
-  .world-cards           { grid-template-columns: 1fr; }
-  .vs-wrap               { grid-template-columns: 1fr; text-align: center; }
+@media (max-width: 900px) {
+  /* 갤러리 */
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 200px;
+  }
 }
 
+/* ────────────────────────────────────────
+   반응형 — 태블릿 소형 (max 768px)
+──────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* 네비 탭 간격 */
+  .topnav-tabs           { gap: 6px; }
+  .topnav-tab            { padding: 9px 18px; font-size: 0.8rem; }
+
+  /* 세계관 카드 1열 */
+  .world-cards           { grid-template-columns: 1fr; }
+
+  /* 세력 대결 세로 */
+  .vs-wrap               { grid-template-columns: 1fr; }
+  .vs-center             { font-size: 2rem; padding: 8px 0; }
+  .vs-side               { padding: 36px 24px; }
+
+  /* 뉴스 아이템 */
+  .news-item             { flex-direction: column; align-items: flex-start; gap: 10px; padding: 18px 20px; }
+  .news-time             { align-self: flex-end; }
+
+  /* 섹션 패딩 */
+  .section               { padding: 80px 0; }
+  .sec-header            { margin-bottom: 50px; }
+}
+
+/* ────────────────────────────────────────
+   반응형 — 모바일 (max 600px)
+──────────────────────────────────────── */
 @media (max-width: 600px) {
-  .topnav-tab            { padding: 8px 16px; font-size: 0.78rem; }
-  .modal-top,
-  .modal-body            { padding: 28px 20px; }
+  /* 네비 - 로고 + 탭 세로 정렬 */
+  .topnav {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 4vw;
+  }
+  .topnav-tabs           { width: 100%; justify-content: center; }
+  .topnav-tab            { flex: 1; padding: 9px 0; font-size: 0.75rem; text-align: center; }
+
+  /* 히어로 */
+  .hero-section          { min-height: 60vh; padding: 24px 16px; }
+  .hero-scroll-hint      { bottom: 20px; }
+
+  /* 섹션 */
+  .section               { padding: 60px 0; }
+  .section-inner         { padding: 0 4vw; }
+  .sec-title             { font-size: clamp(2rem, 8vw, 3rem); }
+
+  /* 타임라인 */
+  .tl-year               { font-size: 1.1rem; }
+  .tl-event              { font-size: 0.95rem; }
+
+  /* 캐릭터 그리드 */
+  .char-grid             { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .char-card             { padding: 22px 16px; }
+  .char-avatar           { width: 80px; height: 80px; }
+  .char-name             { font-size: 1.1rem; }
+  .char-title            { font-size: 0.75rem; }
+
+  /* 모달 */
+  .modal-card            { border-radius: 20px; max-height: 95vh; }
+  .modal-top             { padding: 36px 20px 24px; }
+  .modal-body            { padding: 24px 20px; gap: 22px; }
+  .modal-name            { font-size: 1.7rem; }
   .stat                  { grid-template-columns: 70px 1fr 36px; }
+
+  /* 갤러리 */
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 180px;
+  }
+  .gallery-card.size-large,
+  .gallery-card.size-wide  { grid-column: span 1; grid-row: span 1; }
+  .gallery-overlay         { opacity: 1; }
+
+  /* 라이트박스 */
+  .lightbox-card         { border-radius: 20px; }
+  .lightbox-img          { height: 240px; }
+  .lightbox-info         { padding: 20px; }
+  .lightbox-title        { font-size: 1.2rem; }
+
+  /* 필터 탭 */
+  .filter-tabs           { gap: 8px; }
+  .filter-tab            { padding: 9px 16px; font-size: 0.78rem; }
+
+  /* vs 세력 */
+  .vs-icon               { width: 72px; height: 72px; font-size: 1.8rem; }
+  .vs-name               { font-size: 1.5rem; }
+  .vs-stats              { gap: 8px; }
+
+  /* 뉴스 */
+  .news-left             { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .news-title            { font-size: 0.9rem; }
+
+  /* 푸터 */
+  .footer                { padding: 32px 4vw; }
 }

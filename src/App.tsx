@@ -328,6 +328,7 @@ const GALLERY_TAGS = ["ALL", "ECLIPSE", "HEROES", "WORLD", "EVENT"] as const;
 function GalleryPage() {
   const [filter, setFilter] = useState<string>("ALL");
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+  const [touched, setTouched] = useState<number | null>(null);
 
   const filtered = filter === "ALL"
     ? galleryItems
@@ -354,8 +355,10 @@ function GalleryPage() {
           {filtered.map((item, i) => (
             <div
               key={item.id}
-              className={`gallery-card size-${item.size}`}
+              className={`gallery-card size-${item.size}${touched === item.id ? " touched" : ""}`}
               style={{ animationDelay: `${i * 0.07}s` }}
+              onTouchStart={() => setTouched(item.id)}
+              onTouchEnd={() => setTouched(null)}
               onClick={() => setLightbox(item)}
             >
               <div className="gallery-img" style={{ "--accent": item.accent } as React.CSSProperties}>
@@ -387,7 +390,7 @@ function GalleryPage() {
       {lightbox && (
         <div className="lightbox-overlay" onClick={() => setLightbox(null)}>
           <div className="lightbox-card" onClick={e => e.stopPropagation()}>
-            <button type="button" className="modal-close" onClick={e => { e.stopPropagation(); setLightbox(null); }} aria-label="닫기">×</button>
+            <button type="button" className="modal-close" onClick={() => setLightbox(null)} aria-label="닫기">×</button>
             <div
               className="lightbox-img"
               style={{ "--accent": lightbox.accent } as React.CSSProperties}
