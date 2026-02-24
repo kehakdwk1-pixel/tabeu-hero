@@ -651,7 +651,10 @@ export default function App() {
           <FooterSigilSvg />
         </div>
         <div className="footer-logo">빌어먹을 <em>히어로</em></div>
-        <div className="footer-tagline">현대 판타지 세계관 공식 아카이브</div>
+        <div className="footer-tagline">
+          세계관 · 작품 제작: 김타부 (gimtabeu)<br />
+          홈페이지 제작: 몽유도인 (KimDiUm)
+        </div>
         <div className="footer-meta">DAMN HERO UNIVERSE · OFFICIAL ARCHIVE · ALL RIGHTS RESERVED</div>
       </footer>
 
